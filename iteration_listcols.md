@@ -1,4 +1,4 @@
-Iteration
+iteration and listcols
 ================
 Alexey Abramov
 11/9/2020
@@ -90,7 +90,7 @@ l
     ## 
     ## $summary
     ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-    ## -2.18571 -0.81440 -0.05590 -0.06507  0.61273  2.44712
+    ## -2.88781 -0.77953 -0.04567 -0.07150  0.67154  2.07786
 
 ``` r
 l$vec_number
@@ -158,7 +158,7 @@ mean_and_sd(list_norm[[1]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  2.94 0.841
+    ## 1  2.75  1.16
 
 ``` r
 mean_and_sd(list_norm[[2]])
@@ -167,7 +167,7 @@ mean_and_sd(list_norm[[2]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1 0.908  4.69
+    ## 1  3.54  5.41
 
 ``` r
 mean_and_sd(list_norm[[3]])
@@ -176,7 +176,7 @@ mean_and_sd(list_norm[[3]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1 -2.84  2.32
+    ## 1 -3.36  1.89
 
 ``` r
 mean_and_sd(list_norm[[4]])
@@ -185,7 +185,7 @@ mean_and_sd(list_norm[[4]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  4.66  2.18
+    ## 1  4.79  1.83
 
 Ok, so let’s use a for loop
 
@@ -201,4 +201,41 @@ for (i in 1:4) {
   output[[i]] = mean_and_sd(list_norm[[i]])
   
 }
+```
+
+Let’s try map.
+
+``` r
+map(list_norm, mean_and_sd)
+```
+
+    ## $a
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  2.75  1.16
+    ## 
+    ## $b
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  3.54  5.41
+    ## 
+    ## $c
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1 -3.36  1.89
+    ## 
+    ## $d
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  4.79  1.83
+
+Ok, what about another function\! Just put it in the second argument.
+
+``` r
+output1 = map(list_norm, median)
+output2 = map(list_norm, IQR)
 ```

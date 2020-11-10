@@ -1,5 +1,5 @@
 ---
-title: "Iteration"
+title: "iteration and listcols"
 author:  "Alexey Abramov"
 date: "11/9/2020"
 output: 
@@ -110,5 +110,19 @@ for (i in 1:4) {
   output[[i]] = mean_and_sd(list_norm[[i]])
   
 }
+```
+
+Let's try map.
+
+```{r}
+map(list_norm, mean_and_sd)
+```
+
+Ok, what about another function!
+Just put it in the second argument.
+
+```{r}
+output1 = map(list_norm, median)
+output2 = map(list_norm, IQR)
 ```
 
