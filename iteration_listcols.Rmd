@@ -126,3 +126,44 @@ output1 = map(list_norm, median)
 output2 = map(list_norm, IQR)
 ```
 
+If we just want numbers... we'll get a vector.
+
+```{r}
+output3 = map_dbl(list_norm, median)
+```
+
+Or a dataframe
+
+```{r}
+output4 = map_df(list_norm, mean_and_sd, .id = "input")
+```
+
+List columns so you don't have to keep track of all these different outputs
+
+```{r}
+list_df = 
+  tibble(
+    name = c("a", "b", "c", "d"),
+    samp = list_norm
+  )
+
+list_df %>% 
+  filter(name == "a")
+```
+
+Ok , let's map a dataframe!
+
+```{r}
+map(list_df$samp, mean_and_sd)
+```
+
+Alright but we want this output to be back in the dataframe
+
+```{r}
+list_df =
+  list_df %>% 
+  mutate(
+    summary = map_df(samp, mean_and_sd),
+    medians = map_dbl(samp, median))
+```
+

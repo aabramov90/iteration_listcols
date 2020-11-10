@@ -90,7 +90,7 @@ l
     ## 
     ## $summary
     ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-    ## -2.88781 -0.77953 -0.04567 -0.07150  0.67154  2.07786
+    ## -2.40813 -0.75734 -0.01805 -0.08896  0.55854  2.07049
 
 ``` r
 l$vec_number
@@ -158,7 +158,7 @@ mean_and_sd(list_norm[[1]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  2.75  1.16
+    ## 1  3.24 0.836
 
 ``` r
 mean_and_sd(list_norm[[2]])
@@ -167,7 +167,7 @@ mean_and_sd(list_norm[[2]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  3.54  5.41
+    ## 1  1.80  5.06
 
 ``` r
 mean_and_sd(list_norm[[3]])
@@ -176,7 +176,7 @@ mean_and_sd(list_norm[[3]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1 -3.36  1.89
+    ## 1 -3.70  2.11
 
 ``` r
 mean_and_sd(list_norm[[4]])
@@ -185,7 +185,7 @@ mean_and_sd(list_norm[[4]])
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  4.79  1.83
+    ## 1  5.22  2.04
 
 Ok, so let’s use a for loop
 
@@ -213,29 +213,100 @@ map(list_norm, mean_and_sd)
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  2.75  1.16
+    ## 1  3.24 0.836
     ## 
     ## $b
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  3.54  5.41
+    ## 1  1.80  5.06
     ## 
     ## $c
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1 -3.36  1.89
+    ## 1 -3.70  2.11
     ## 
     ## $d
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  4.79  1.83
+    ## 1  5.22  2.04
 
 Ok, what about another function\! Just put it in the second argument.
 
 ``` r
 output1 = map(list_norm, median)
 output2 = map(list_norm, IQR)
+```
+
+If we just want numbers… we’ll get a vector.
+
+``` r
+output3 = map_dbl(list_norm, median)
+```
+
+Or a dataframe
+
+``` r
+output4 = map_df(list_norm, mean_and_sd, .id = "input")
+```
+
+List columns so you don’t have to keep track of all these different
+outputs
+
+``` r
+list_df = 
+  tibble(
+    name = c("a", "b", "c", "d"),
+    samp = list_norm
+  )
+
+list_df %>% 
+  filter(name == "a")
+```
+
+    ## # A tibble: 1 x 2
+    ##   name  samp        
+    ##   <chr> <named list>
+    ## 1 a     <dbl [20]>
+
+Ok , let’s map a dataframe\!
+
+``` r
+map(list_df$samp, mean_and_sd)
+```
+
+    ## $a
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  3.24 0.836
+    ## 
+    ## $b
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  1.80  5.06
+    ## 
+    ## $c
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1 -3.70  2.11
+    ## 
+    ## $d
+    ## # A tibble: 1 x 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  5.22  2.04
+
+Alright but we want this output to be back in the dataframe
+
+``` r
+list_df =
+  list_df %>% 
+  mutate(
+    summary = map_df(samp, mean_and_sd),
+    medians = map_dbl(samp, median))
 ```
